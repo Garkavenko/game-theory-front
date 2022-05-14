@@ -67,6 +67,7 @@ function Participant({ cost, evaluations, order, results, children }: Participan
       <Box sx={{ display: 'flex', width: '100%' }}>
         <Box sx={{ flex: 1 }}>
           <Block title="Оценки">
+            {/* @ts-ignore */}
             <Chart
               data={evaluationsChart}
               height={300}
@@ -76,12 +77,14 @@ function Participant({ cost, evaluations, order, results, children }: Participan
 
               <LineSeries valueField="value" argumentField="step" />
               <EventTracker />
+              {/* @ts-ignore */}
               <Tooltip targetItem={evaluationsTarget} onTargetItemChange={setEvaluationsTarget} />
             </Chart>
           </Block>
         </Box>
         <Box sx={{ flex: 1 }}>
           <Block title="Функция цели">
+            {/* @ts-ignore */}
             <Chart
               data={resultsChart}
               height={300}
@@ -91,6 +94,7 @@ function Participant({ cost, evaluations, order, results, children }: Participan
 
               <LineSeries valueField="value" argumentField="step" />
               <EventTracker />
+              {/* @ts-ignore */}
               <Tooltip targetItem={resultsTarget} onTargetItemChange={setResultsTarget} />
             </Chart>
           </Block>

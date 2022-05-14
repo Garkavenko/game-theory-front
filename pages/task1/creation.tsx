@@ -12,6 +12,7 @@ import React, {useEffect, useState} from "react";
 import {useMutation} from "react-query";
 import {useRouter} from "next/router";
 import axios from "axios";
+import {API_ENDPOINT} from "../../constants";
 
 
 interface FormItemProps {
@@ -31,7 +32,7 @@ const INPUT_WIDTH = 150;
 function Creation() {
 
   const mutation = useMutation('createTask1Room', ({ method, penalty, step, resource, roomType, usersNumber, stepsCount }: any) => {
-    return axios('http://localhost:8080/createRoom', {
+    return axios(`${API_ENDPOINT}/createRoom`, {
       method: 'post',
       data: {
         priorityMethod: method,

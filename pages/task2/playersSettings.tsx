@@ -14,6 +14,7 @@ import React, {Dispatch, SetStateAction, useState} from "react";
 import {useRouter} from "next/router";
 import {useMutation, useQuery} from "react-query";
 import axios from "axios";
+import {API_ENDPOINT} from "../../constants";
 
 interface FormItemProps {
   setSpending: Dispatch<SetStateAction<Record<string, { userId: number, cost: string, initValue: string }>>>;
@@ -53,7 +54,7 @@ function PlayersSettings() {
   const token = router.query.token;
   console.log(token);
   const query = useQuery(`task2CenterInfo${token}`, () => {
-    return axios(`http://localhost:8080/task2/getInfoForCenter?token=${token}`, {
+    return axios(`${API_ENDPOINT}/getInfoForCenter?token=${token}`, {
       method: 'get',
     })
   }, {
@@ -61,7 +62,7 @@ function PlayersSettings() {
   });
 
   const mutation = useMutation(`task2PlayersSettings${token}`, ({ settings, initValues }: any) => {
-    return axios(`http://localhost:8080/task2/setUsers`, {
+    return axios(`${API_ENDPOINT}/task2/setUsers`, {
       method: 'post',
       data: {
         token,

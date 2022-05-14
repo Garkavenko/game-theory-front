@@ -3,6 +3,7 @@ import {Button, Container, Divider, FormControl, FormGroup, FormLabel, Paper, Te
 import {useMutation, useQuery} from "react-query";
 import axios from "axios";
 import {useRouter} from "next/router";
+import {API_ENDPOINT} from "../../constants";
 
 
 function Connect() {
@@ -11,7 +12,7 @@ function Connect() {
   const router = useRouter();
 
   const mutation = useMutation(`task1Connect${roomId}`, () => {
-    return axios('http://localhost:8080/connectUser', {
+    return axios(API_ENDPOINT + '/connectUser', {
       method: 'post',
       data: {
         roomId: parseInt(roomId, 10) || 0,
@@ -20,7 +21,7 @@ function Connect() {
   });
 
   const query = useQuery(`task1ParticipantInfo${token}`, () => {
-    return axios(`http://localhost:8080/getInfoForParticipant?token=${token}`, {
+    return axios(`${API_ENDPOINT}/getInfoForParticipant?token=${token}`, {
       method: 'get',
     })
   }, {

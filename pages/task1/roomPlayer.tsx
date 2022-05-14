@@ -16,12 +16,13 @@ import {
 import Participant from "../../components/Task1/Participant";
 import Timer from "../../components/Task1/Timer";
 import Block from "../../components/common/Block";
+import {API_ENDPOINT} from "../../constants";
 
 function RoomPlayer() {
   const token = useRouter().query.token;
   const [initValue, setInitValue] = useState('');
   const query = useQuery(`task1ParticipantInfo${token}`, () => {
-    return axios(`http://localhost:8080/getInfoForParticipant?token=${token}`, {
+    return axios(`${API_ENDPOINT}/getInfoForParticipant?token=${token}`, {
       method: 'get',
     })
   }, {
@@ -29,7 +30,7 @@ function RoomPlayer() {
   });
 
   const mutation = useMutation(`makeDecision${token}`, ({ decision, initValue }: any) => {
-    return axios('http://localhost:8080/setUserDecision', {
+    return axios(API_ENDPOINT + '/setUserDecision', {
       method: 'post',
       data: {
         token,

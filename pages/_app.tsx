@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const reactQuery = useMemo(() => new QueryClient(), []);
   const router = useRouter();
   return (
+      /* @ts-ignore */
       <QueryClientProvider client={reactQuery}>
         <div style={{ backgroundColor: '#c7eaff', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'scroll' }}>
           <Component {...pageProps} />

@@ -29,6 +29,7 @@ import axios from "axios";
 import Participant from "../../components/Task1/Participant";
 import Timer from "../../components/Task1/Timer";
 import Block from "../../components/common/Block";
+import {API_ENDPOINT} from "../../constants";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -55,7 +56,7 @@ function Room() {
   const token = router.query.token;
   const [target, setTarget] = useState();
   const query = useQuery(`roomInfo${token}`, () => {
-    return axios('http://localhost:8080/getInfoForCenter?token=' + token, {
+    return axios(`${API_ENDPOINT}/getInfoForCenter?token=` + token, {
       method: 'get',
     })
   }, {
@@ -63,11 +64,12 @@ function Room() {
   });
 
   const mutation = useMutation(`stopRoom${token}`, () => {
-    return axios('http://localhost:8080/stopRoom?token=' + token, {
+    return axios(`${API_ENDPOINT}/stopRoom?token=` + token, {
       method: 'post',
     })
   })
   const theme = useTheme();
+  /* @ts-ignore */
   const chartData = useMemo(() => query.data?.data?.results?.map((r, i) => ({
     value: r,
     index: i + 1,
@@ -116,6 +118,7 @@ function Room() {
           <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
             <Typography style={{ color: 'white', fontSize: 16 }}>График целевой функции центра</Typography>
           </Box>
+          {/* @ts-ignore */}
           <Chart
             data={chartData}
             height={300}
@@ -125,6 +128,7 @@ function Room() {
 
             <LineSeries valueField="value" argumentField="index" />
             <EventTracker />
+            {/* @ts-ignore */}
             <Tooltip targetItem={target} onTargetItemChange={setTarget} />
           </Chart>
         </Box>
@@ -156,8 +160,9 @@ function Room() {
             </Block>
         </Box>
         <Box>
-          {query.data?.data?.users?.map((u) => (
-            <Accordion sx={{ margin: 2 }}>
+          {/* @ts-ignore */}
+          {query.data?.data?.users?.map((u, i) => (
+            <Accordion key={i} sx={{ margin: 2 }}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
                 aria-controls="panel1bh-content"

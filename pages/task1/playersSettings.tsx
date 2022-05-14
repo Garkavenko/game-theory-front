@@ -14,6 +14,7 @@ import React, {Dispatch, SetStateAction, useState} from "react";
 import {useRouter} from "next/router";
 import {useMutation, useQuery} from "react-query";
 import axios from "axios";
+import {API_ENDPOINT} from "../../constants";
 
 interface FormItemProps {
   setSpending: Dispatch<SetStateAction<Record<string, { userId: number, cost: string, initValue: string }>>>;
@@ -53,7 +54,7 @@ function PlayersSettings() {
   const token = router.query.token;
   console.log(token);
   const query = useQuery(`task1CenterInfo${token}`, () => {
-    return axios(`http://localhost:8080/getInfoForCenter?token=${token}`, {
+    return axios(`${API_ENDPOINT}/getInfoForCenter?token=${token}`, {
       method: 'get',
     })
   }, {
@@ -61,7 +62,7 @@ function PlayersSettings() {
   });
 
   const mutation = useMutation(`task1PlayersSettings${token}`, ({ settings, initValues }: any) => {
-    return axios(`http://localhost:8080/setUsers`, {
+    return axios(`${API_ENDPOINT}/setUsers`, {
       method: 'post',
       data: {
         token,
@@ -71,6 +72,7 @@ function PlayersSettings() {
     })
   })
   const [spending, setSpending] = useState<Record<string, { userId: number, cost: string, initValue: string }>>({});
+  const theme = useTheme();
   console.log(!query.data?.data?.roomId);
   if (query.isLoading || !query.data?.data?.roomId) {
     return (
@@ -81,8 +83,6 @@ function PlayersSettings() {
       </Container>
     )
   }
-
-  const theme = useTheme();
 
   return (
     <Container sx={{ display: 'flex', alignItems: 'center', marginTop: 3 }}>

@@ -2,12 +2,13 @@ import {Button, CircularProgress, Container} from "@mui/material";
 import {useMutation, useQuery} from "react-query";
 import {useRouter} from "next/router";
 import axios from "axios";
+import {API_ENDPOINT} from "../../constants";
 
 function Waiting() {
   const router = useRouter();
   const token = router.query.token;
   const mutation = useMutation(`finishTask1Registration${token}`, () => {
-    return axios('http://localhost:8080/finishRegistration', {
+    return axios(`${API_ENDPOINT}/finishRegistration`, {
       method: 'post',
       data: {
         token
@@ -16,7 +17,7 @@ function Waiting() {
   });
 
   const query = useQuery(`roomParticipantsInfo${token}`, () => {
-    return axios(`http://localhost:8080/roomParticipantsInfo?token=${router.query.token}`, {
+    return axios(`${API_ENDPOINT}/roomParticipantsInfo?token=${router.query.token}`, {
       method: 'get',
     })
   }, {

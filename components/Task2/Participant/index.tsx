@@ -50,6 +50,7 @@ function Participant({ cost, evaluations, order, results, children }: Participan
           <h3>
             Оценки
           </h3>
+          {/* @ts-ignore */}
           <Chart
             data={evaluationsChart}
             height={300}
@@ -59,6 +60,7 @@ function Participant({ cost, evaluations, order, results, children }: Participan
 
             <LineSeries valueField="value" argumentField="step" />
             <EventTracker />
+            {/* @ts-ignore */}
             <Tooltip targetItem={evaluationsTarget} onTargetItemChange={setEvaluationsTarget} />
           </Chart>
         </Box>
@@ -66,6 +68,7 @@ function Participant({ cost, evaluations, order, results, children }: Participan
           <h3>
             Функция цели
           </h3>
+          {/* @ts-ignore */}
           <Chart
             data={resultsChart}
             height={300}
@@ -75,6 +78,7 @@ function Participant({ cost, evaluations, order, results, children }: Participan
 
             <LineSeries valueField="value" argumentField="step" />
             <EventTracker />
+            {/* @ts-ignore */}
             <Tooltip targetItem={resultsTarget} onTargetItemChange={setResultsTarget} />
           </Chart>
         </Box>

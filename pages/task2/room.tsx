@@ -28,6 +28,7 @@ import {useRouter} from "next/router";
 import axios from "axios";
 import Participant from "../../components/Task1/Participant";
 import Timer from "../../components/Task1/Timer";
+import {API_ENDPOINT} from "../../constants";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -54,7 +55,7 @@ function Room() {
   const token = router.query.token;
   const [target, setTarget] = useState();
   const query = useQuery(`roomInfo${token}`, () => {
-    return axios('http://localhost:8080/task2/getInfoForCenter?token=' + token, {
+    return axios(`${API_ENDPOINT}/task2/getInfoForCenter?token=` + token, {
       method: 'get',
     })
   }, {
@@ -62,11 +63,11 @@ function Room() {
   });
 
   const mutation = useMutation(`stopRoom${token}`, () => {
-    return axios('http://localhost:8080/task2/stopRoom?token=' + token, {
+    return axios(`${API_ENDPOINT}/task2/stopRoom?token=` + token, {
       method: 'post',
     })
   })
-
+  /* @ts-ignore */
   const chartData = useMemo(() => query.data?.data?.results?.map((r, i) => ({
     value: r,
     index: i + 1,
@@ -103,6 +104,7 @@ function Room() {
         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
         <h3>График целевой функции центра</h3>
         <Box>
+          {/* @ts-ignore */}
           <Chart
             data={chartData}
             height={300}
@@ -112,6 +114,7 @@ function Room() {
 
             <LineSeries valueField="value" argumentField="index" />
             <EventTracker />
+            {/* @ts-ignore */}
             <Tooltip targetItem={target} onTargetItemChange={setTarget} />
           </Chart>
           <h4>Значения функции цели</h4>
@@ -143,8 +146,9 @@ function Room() {
         </Box>
         <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
         <Box>
-          {query.data?.data?.users?.map((u) => (
-            <Accordion>
+          {/* @ts-ignore */}
+          {query.data?.data?.users?.map((u, i) => (
+            <Accordion key={i}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"

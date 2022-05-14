@@ -11,11 +11,12 @@ import {useEffect, useState} from "react";
 import {useMutation} from "react-query";
 import {useRouter} from "next/router";
 import axios from "axios";
+import {API_ENDPOINT} from "../../constants";
 
 function Creation() {
 
   const mutation = useMutation('createTask1Room', ({ method, penalty, step, resource, roomType, usersNumber, stepsCount }: any) => {
-    return axios('http://localhost:8080/task2/createRoom', {
+    return axios(`${API_ENDPOINT}/task2/createRoom`, {
       method: 'post',
       data: {
         priorityMethod: method,
