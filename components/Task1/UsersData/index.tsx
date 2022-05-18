@@ -72,50 +72,6 @@ function UsersData({
 
   return (
     <>
-      <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
-        <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
-          <Typography style={{ color: 'white', fontSize: 16 }}>График оценок участников</Typography>
-        </Box>
-        {/* @ts-ignore */}
-        <Chart
-          data={allUsersResultsChartData}
-          height={300}
-        >
-          <ArgumentAxis />
-          <ValueAxis showTicks />
-          {
-            users?.map((u, i) => (
-              <LineSeries key={i} seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}e`} argumentField="index" color={colors[i % colors.length]} />
-            ))
-          }
-          <EventTracker />
-          {/* @ts-ignore */}
-          <Tooltip targetItem={allUsersTarget} onTargetItemChange={setAllUsersTarget} />
-          <Legend />
-        </Chart>
-      </Box>
-      <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
-        <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
-          <Typography style={{ color: 'white', fontSize: 16 }}>График значений участников</Typography>
-        </Box>
-        {/* @ts-ignore */}
-        <Chart
-          data={allUsersResultsChartData}
-          height={300}
-        >
-          <ArgumentAxis />
-          <ValueAxis showTicks />
-          {
-            users?.map((u, i) => (
-              <LineSeries key={i} seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}r`} argumentField="index" color={colors[i % colors.length]} />
-            ))
-          }
-          <EventTracker />
-          {/* @ts-ignore */}
-          <Tooltip targetItem={allUsersTarget} onTargetItemChange={setAllUsersTarget} />
-          <Legend />
-        </Chart>
-      </Box>
       <Box>
         <Block title="Таблица результатов">
           <TableContainer sx={{ maxHeight: 600 }}>
@@ -190,6 +146,48 @@ function UsersData({
             </Table>
           </TableContainer>
         </Block>
+      </Box>
+      <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
+        <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+          <Typography style={{ color: 'white', fontSize: 16 }}>График оценок участников</Typography>
+        </Box>
+        {/* @ts-ignore */}
+        <Chart
+          data={allUsersResultsChartData}
+        >
+          <ArgumentAxis />
+          <ValueAxis showTicks />
+          {
+            users?.map((u, i) => (
+              <LineSeries key={i} seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}e`} argumentField="index" color={colors[i % colors.length]} />
+            ))
+          }
+          <EventTracker />
+          {/* @ts-ignore */}
+          <Tooltip targetItem={allUsersTarget} onTargetItemChange={setAllUsersTarget} />
+          <Legend />
+        </Chart>
+      </Box>
+      <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
+        <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+          <Typography style={{ color: 'white', fontSize: 16 }}>График значений участников</Typography>
+        </Box>
+        {/* @ts-ignore */}
+        <Chart
+          data={allUsersResultsChartData}
+        >
+          <ArgumentAxis />
+          <ValueAxis showTicks />
+          {
+            users?.map((u, i) => (
+              <LineSeries key={i} seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}r`} argumentField="index" color={colors[i % colors.length]} />
+            ))
+          }
+          <EventTracker />
+          {/* @ts-ignore */}
+          <Tooltip targetItem={allUsersTarget} onTargetItemChange={setAllUsersTarget} />
+          <Legend />
+        </Chart>
       </Box>
     </>
   )

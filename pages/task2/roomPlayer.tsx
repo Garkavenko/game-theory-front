@@ -66,7 +66,7 @@ function RoomPlayer() {
     <Container sx={{ display: 'flex', alignItems: 'center', marginTop: 3 }}>
       <Paper sx={{ paddingBottom: 10, width: '100%', backgroundColor: '#f3f3f3' }}>
         <Box sx={{ backgroundColor: theme.palette.primary.main, marginBottom: 2, padding: 2 }}>
-          <Typography style={{ color: 'white', fontSize: 22 }}>Моделирование процесса финансирования совместного проекта</Typography>
+          <Typography style={{ color: 'white', fontSize: 22 }}>Моделирование процесса распределения портфеля заказов</Typography>
         </Box>
         <Participant
           order={data?.order}
