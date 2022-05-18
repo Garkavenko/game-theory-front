@@ -11,7 +11,7 @@ import {
   TableBody,
   TableCell, tableCellClasses, TableContainer,
   TableHead,
-  TableRow, Typography
+  TableRow, Typography, useTheme
 } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
@@ -29,6 +29,9 @@ import axios from "axios";
 import Participant from "../../components/Task1/Participant";
 import Timer from "../../components/Task1/Timer";
 import {API_ENDPOINT} from "../../constants";
+import Block from "../../components/common/Block";
+import {LineWithCirclePoint} from "../../components/common/charts/helpers";
+import UsersData from "../../components/Task2/UsersData";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -62,6 +65,17 @@ function Room() {
     refetchInterval: 1000,
   });
 
+  const setUserCanSeeMutation = useMutation(`setUserCanSee`, ({ canSee, order }: { canSee: boolean, order: number }) => {
+    return axios(`${API_ENDPOINT}/task2/setUserSeeAbility`, {
+      method: 'post',
+      data: {
+        canSee,
+        userOrder: order,
+        token,
+      }
+    })
+  });
+
   const mutation = useMutation(`stopRoom${token}`, () => {
     return axios(`${API_ENDPOINT}/task2/stopRoom?token=` + token, {
       method: 'post',
@@ -72,7 +86,7 @@ function Room() {
     value: r,
     index: i + 1,
   })), [query.data?.data?.results]);
-
+  const theme = useTheme();
   if (query.isLoading || !query.data?.data) {
     return (
       <Container sx={{ display: 'flex', alignItems: 'center', marginTop: 3 }}>
@@ -85,25 +99,37 @@ function Room() {
   console.log(query.data?.data?.nextStepAfter || 0);
   return (
     <Container sx={{ display: 'flex', alignItems: 'center', marginTop: 3 }}>
-      <Paper sx={{ padding: 2, paddingBottom: 10 }}>
-        <h1>Моделирование процесса распределения портфеля заказов</h1>
-        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-        <Box>
+      <Paper sx={{ paddingBottom: 10, width: '100%', backgroundColor: '#f3f3f3', overflow: 'visible' }}>
+        <Box sx={{ backgroundColor: theme.palette.primary.main, marginBottom: 2, padding: 2 }}>
+          <Typography style={{ color: 'white', fontSize: 22 }}>Моделирование процесса финансирования совместного проекта</Typography>
+        </Box>
+
+        <Block title="Игра" titleColor="green">
           {!query.data?.data?.finished ? (
             <>
-              <Button variant="contained" onClick={() => {
-                mutation.mutate();
-              }}>Завершить игру</Button>
-              <h4>Текущий шаг: {query.data?.data?.currentStep}</h4>
-              <h4>До следующего шага: <Timer finishAt={query.data?.data?.nextTickAt || 0} /></h4>
+              <Box sx={{ display: 'flex' }}>
+                <Box sx={{ marginRight: 1, borderWidth: 1, borderStyle: 'solid', borderColor: '#91d5ff', backgroundColor: '#e6f7ff', borderRadius: 1, padding: 0.5 }}>
+                  <Typography sx={{ color: '#096dd9' }}>Текущий шаг: <b>{query.data?.data?.currentStep}</b></Typography>
+                </Box>
+                <Box sx={{ marginRight: 1, borderWidth: 1, borderStyle: 'solid', borderColor: '#87e8de', backgroundColor: '#e6fffb', borderRadius: 1, padding: 0.5 }}>
+                  <Typography sx={{ color: '#08979c' }}>До следующего шага: <b><Timer finishAt={query.data?.data?.nextTickAt || 0} /></b></Typography>
+                </Box>
+
+                <Button variant="contained" color="error" onClick={() => {
+                  mutation.mutate();
+                }}>Завершить игру</Button>
+              </Box>
             </>
           ) : (
-            <h4>Игра завершена</h4>
+            <Typography sx={{ fontWeight: 'bold', color: '#f44336' }}>
+              Игра завершена
+            </Typography>
           )}
-        </Box>
-        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-        <h3>График целевой функции центра</h3>
-        <Box>
+        </Block>
+        <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
+          <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+            <Typography style={{ color: 'white', fontSize: 16 }}>График целевой функции центра</Typography>
+          </Box>
           {/* @ts-ignore */}
           <Chart
             data={chartData}
@@ -112,57 +138,18 @@ function Room() {
             <ArgumentAxis />
             <ValueAxis showTicks />
 
-            <LineSeries valueField="value" argumentField="index" />
+            <LineSeries seriesComponent={LineWithCirclePoint} valueField="value" argumentField="index" />
             <EventTracker />
             {/* @ts-ignore */}
             <Tooltip targetItem={target} onTargetItemChange={setTarget} />
           </Chart>
-          <h4>Значения функции цели</h4>
-          <Box sx={{ height: 400, width: 300, overflow: 'auto' }}>
-            <TableContainer>
-            <Table sx={{ overflow: 'auto' }} aria-label="simple table">
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell>Шаг</StyledTableCell>
-                  <StyledTableCell align="right">Значение цели</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
-              <TableBody>
-                {([...query.data?.data?.results].reverse()).map((r, i) => (
-                  <StyledTableRow
-                    key={i}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <StyledTableCell component="th" scope="row">
-                      {(query.data?.data?.results?.length || 0) - i}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">{r}</StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-            </TableContainer>
-          </Box>
         </Box>
-        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-        <Box>
-          {/* @ts-ignore */}
-          {query.data?.data?.users?.map((u, i) => (
-            <Accordion key={i}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-              >
-                <Typography>
-                  Данные участника #{u.order}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Participant order={u.order} cost={u.cost} results={u.results} evaluations={u.evaluations} />
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </Box>
+        <UsersData lambdas={query.data?.data?.lambdas} users={query.data?.data?.users} onUserCanSee={(order, canSee) => {
+          setUserCanSeeMutation.mutate({
+            canSee: canSee,
+            order: order,
+          })
+        }} centerResults={query.data?.data?.results} />
       </Paper>
     </Container>
   )

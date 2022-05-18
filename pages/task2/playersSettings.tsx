@@ -8,7 +8,7 @@ import {
   FormLabel,
   makeStyles,
   Paper,
-  TextField
+  TextField, Typography, useTheme
 } from "@mui/material";
 import React, {Dispatch, SetStateAction, useState} from "react";
 import {useRouter} from "next/router";
@@ -54,7 +54,7 @@ function PlayersSettings() {
   const token = router.query.token;
   console.log(token);
   const query = useQuery(`task2CenterInfo${token}`, () => {
-    return axios(`${API_ENDPOINT}/getInfoForCenter?token=${token}`, {
+    return axios(`${API_ENDPOINT}/task2/getInfoForCenter?token=${token}`, {
       method: 'get',
     })
   }, {
@@ -73,6 +73,7 @@ function PlayersSettings() {
   })
   const [spending, setSpending] = useState<Record<string, { userId: number, cost: string, initValue: string }>>({});
   console.log(!query.data?.data?.roomId);
+  const theme = useTheme();
   if (query.isLoading || !query.data?.data?.roomId) {
     return (
       <Container sx={{ display: 'flex', alignItems: 'center', marginTop: 3 }}>
@@ -85,27 +86,35 @@ function PlayersSettings() {
 
   return (
     <Container sx={{ display: 'flex', alignItems: 'center', marginTop: 3 }}>
-      <Paper sx={{ padding: 2 }}>
-        <h1>Моделирование процесса распределения портфеля заказов</h1>
-        <h2>Настроить затраты участников</h2>
-        <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
-          {query.data?.data.users.map((item: any, i: number) => (
-            <FormItemMemo userId={item.id} value={spending[item.order]} setSpending={setSpending} index={`${item.order}`} key={item.order} />
-          ))}
-        </FormGroup>
+      <Paper sx={{ width: '100%', backgroundColor: '#f3f3f3', overflow: 'hidden' }}>
+        <Box sx={{ backgroundColor: theme.palette.primary.main, marginBottom: 2, padding: 2 }}>
+          <Typography style={{ color: 'white', fontSize: 22 }}>Моделирование процесса распределения портфеля заказов</Typography>
+        </Box>
+        <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
+          <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+            <Typography style={{ color: 'white', fontSize: 16 }}>Настроить затраты участников</Typography>
+          </Box>
+          <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
+            {query.data?.data.users.map((item: any, i: number) => (
+              <FormItemMemo userId={item.id} value={spending[item.order]} setSpending={setSpending} index={`${item.order}`} key={item.order} />
+            ))}
+          </FormGroup>
+        </Box>
         {
           query.data?.data.roomType === 'imitation' && (
-            <>
-              <h2>Настроить первичные оценки участников участников</h2>
+            <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
+              <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+                <Typography style={{ color: 'white', fontSize: 16 }}>Настроить первичные оценки участников участников</Typography>
+              </Box>
               <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
                 {query.data?.data.users.map((item: any, i: number) => (
                   <FormItemInitMemo userId={item.id} value={spending[item.order]} setSpending={setSpending} index={`${item.order}`} key={item.order} />
                 ))}
               </FormGroup>
-            </>
+            </Box>
           )
         }
-        <Box sx={{ marginTop: 2 }}>
+        <Box sx={{ marginTop: 2, backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2}}>
           <Button onClick={() => {
             mutation.mutate(Object.keys(spending).reduce<{ settings: { userId: number, value: number }[], initValues: { userId: number, value: number }[] }>((acc, item) => {
               return {

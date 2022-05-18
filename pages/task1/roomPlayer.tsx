@@ -48,6 +48,10 @@ function RoomPlayer() {
     }
   }, [data?.cost]);
 
+  useEffect(() => {
+    setInitValue('');
+  }, [data?.currentStep])
+
   const theme = useTheme();
 
   if (query.isLoading || !query.data?.data) {
@@ -71,16 +75,21 @@ function RoomPlayer() {
           evaluations={data?.evaluations}
           results={data?.results}
           cost={data?.cost}
+          canSeeOthers={data?.canSeeOthers}
+          users={data?.users}
+          centerResults={data?.roomResults}
+          nextTickAt={data?.nextTickAt}
+          currentStep={data?.currentStep}
           >
           <Block title="Игра" titleColor="green">
             {data?.roomStarted && !data?.roomFinished ? (
               <>
-                <Box sx={{ display: 'flex', marginBottom: 2 }}>
-                  <Box sx={{ marginRight: 1, borderWidth: 1, borderStyle: 'solid', borderColor: '#adc6ff', backgroundColor: '#f0f5ff', borderRadius: 1, padding: 0.5 }}>
-                    <Typography sx={{ color: '#1d39c4' }}>Текущий шаг: <b>{data?.currentStep}</b></Typography>
+                <Box sx={{ display: 'flex' }}>
+                  <Box sx={{ marginRight: 1, borderWidth: 1, borderStyle: 'solid', borderColor: '#91d5ff', backgroundColor: '#e6f7ff', borderRadius: 1, padding: 0.5 }}>
+                    <Typography sx={{ color: '#096dd9' }}>Значение затрат: <b>{data?.cost}</b></Typography>
                   </Box>
-                  <Box sx={{ borderWidth: 1, borderStyle: 'solid', borderColor: '#d3adf7', backgroundColor: '#f9f0ff', borderRadius: 1, padding: 0.5 }}>
-                    <Typography sx={{ color: '#531dab' }}>До следующего шага: <b><Timer finishAt={data?.nextTickAt || 0} /></b></Typography>
+                  <Box sx={{ borderWidth: 1, borderStyle: 'solid', borderColor: '#87e8de', backgroundColor: '#e6fffb', borderRadius: 1, padding: 0.5 }}>
+                    <Typography sx={{ color: '#08979c' }}>Текущая оценка: <b>{data?.evaluations?.[(data?.evaluations?.length) - 1] || '-'}</b></Typography>
                   </Box>
                 </Box>
                 {
@@ -104,12 +113,12 @@ function RoomPlayer() {
                             <FormControl onBlur={() => {
                               setInitValue(prev => `${parseFloat(prev) || ''}`)
                             }} sx={{ marginTop: 2, marginBottom: 2, width: 300 }}>
-                              <FormLabel>Начальная оценка</FormLabel>
+                              <FormLabel>Введите оценку</FormLabel>
                               <TextField variant="outlined" onChange={e => setInitValue(e.target.value)} value={initValue}  name="roomId" id="my-input" aria-describedby="my-helper-text"/>
                             </FormControl>
                             <FormControl sx={{ marginTop: 2, marginBottom: 2, width: 300 }}>
-                              <Button onClick={() => {
-                                mutation.mutate({ initValue: parseFloat(`${initValue || 0}`) })
+                              <Button onClick={async () => {
+                                await mutation.mutateAsync({ initValue: parseFloat(`${initValue || 0}`) });
                               }} variant="contained">Подтвердить</Button>
                             </FormControl>
                           </FormGroup>

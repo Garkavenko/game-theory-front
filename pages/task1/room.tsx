@@ -2,10 +2,10 @@ import React, {useEffect, useMemo, useState} from 'react';
 
 import {
   Accordion, AccordionDetails, AccordionSummary,
-  Box, Button,
+  Box, Button, Checkbox,
   CircularProgress, Collapse,
   Container,
-  Divider,
+  Divider, FormControlLabel,
   Paper, styled,
   Table,
   TableBody,
@@ -14,6 +14,7 @@ import {
   TableRow, Typography, useTheme
 } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { round } from 'lodash';
 import {
   ArgumentAxis,
   ValueAxis,
@@ -21,6 +22,7 @@ import {
   LineSeries,
   Legend,
   Tooltip,
+  ScatterSeries,
 } from '@devexpress/dx-react-chart-material-ui';
 import {EventTracker} from "@devexpress/dx-react-chart";
 import {useMutation, useQuery} from "react-query";
@@ -30,10 +32,19 @@ import Participant from "../../components/Task1/Participant";
 import Timer from "../../components/Task1/Timer";
 import Block from "../../components/common/Block";
 import {API_ENDPOINT} from "../../constants";
+import {
+  symbol,
+  symbolCross,
+  symbolDiamond,
+  symbolStar,
+  symbolCircle,
+} from 'd3-shape';
+import {colors, LineWithCirclePoint} from "../../components/common/charts/helpers";
+import UsersData from "../../components/Task1/UsersData";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: theme.palette.primary.dark,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -51,6 +62,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+
 function Room() {
   const router = useRouter()
   const token = router.query.token;
@@ -67,11 +79,23 @@ function Room() {
     return axios(`${API_ENDPOINT}/stopRoom?token=` + token, {
       method: 'post',
     })
-  })
+  });
+
+  const setUserCanSeeMutation = useMutation(`setUserCanSee`, ({ canSee, order }: { canSee: boolean, order: number }) => {
+    return axios(`${API_ENDPOINT}/setUserSeeAbility`, {
+      method: 'post',
+      data: {
+        canSee,
+        userOrder: order,
+        token,
+      }
+    })
+  });
+
   const theme = useTheme();
   /* @ts-ignore */
   const chartData = useMemo(() => query.data?.data?.results?.map((r, i) => ({
-    value: r,
+    value: round(r, 1),
     index: i + 1,
   })), [query.data?.data?.results]);
 
@@ -126,58 +150,18 @@ function Room() {
             <ArgumentAxis />
             <ValueAxis showTicks />
 
-            <LineSeries valueField="value" argumentField="index" />
+            <LineSeries seriesComponent={LineWithCirclePoint} valueField="value" argumentField="index" />
             <EventTracker />
             {/* @ts-ignore */}
             <Tooltip targetItem={target} onTargetItemChange={setTarget} />
           </Chart>
         </Box>
-        <Box>
-          <Block title="Значения функции цели">
-              <TableContainer sx={{ maxHeight: 440, width: 300 }}>
-              <Table stickyHeader aria-label="simple table">
-                <TableHead>
-                  <StyledTableRow>
-                    <StyledTableCell>Шаг</StyledTableCell>
-                    <StyledTableCell align="right">Значение цели</StyledTableCell>
-                  </StyledTableRow>
-                </TableHead>
-                <TableBody>
-                  {([...query.data?.data?.results].reverse()).map((r, i) => (
-                    <StyledTableRow
-                      key={i}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <StyledTableCell component="th" scope="row">
-                        {(query.data?.data?.results?.length || 0) - i}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">{r}</StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              </TableContainer>
-            </Block>
-        </Box>
-        <Box>
-          {/* @ts-ignore */}
-          {query.data?.data?.users?.map((u, i) => (
-            <Accordion key={i} sx={{ margin: 2 }}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
-                aria-controls="panel1bh-content"
-                sx={{  borderRadius: 0, backgroundColor: theme.palette.primary.dark, color: 'white', position: 'sticky', top: 0, zIndex: 1000 }}
-              >
-                <Typography>
-                  Данные участника #{u.order}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Participant order={u.order} cost={u.cost} results={u.results} evaluations={u.evaluations} />
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </Box>
+        <UsersData users={query.data?.data?.users} onUserCanSee={(order, canSee) => {
+          setUserCanSeeMutation.mutate({
+            canSee: canSee,
+            order: order,
+          })
+        }} centerResults={query.data?.data?.results} />
       </Paper>
     </Container>
   )
