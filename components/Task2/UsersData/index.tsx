@@ -87,7 +87,7 @@ function UsersData({
           <ValueAxis showTicks />
           {
             users?.map((u, i) => (
-              <LineSeries seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}e`} argumentField="index" color={colors[i % colors.length]} />
+              <LineSeries key={i} seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}e`} argumentField="index" color={colors[i % colors.length]} />
             ))
           }
           <EventTracker />
@@ -109,7 +109,7 @@ function UsersData({
           <ValueAxis showTicks />
           {
             users?.map((u, i) => (
-              <LineSeries seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}r`} argumentField="index" color={colors[i % colors.length]} />
+              <LineSeries key={i} seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}r`} argumentField="index" color={colors[i % colors.length]} />
             ))
           }
           <EventTracker />
@@ -179,14 +179,14 @@ function UsersData({
                     <StyledTableCell align="right">{round(r, 1)}</StyledTableCell>
                     <StyledTableCell align="right">{round(lambdas?.[centerResults?.length - i - 1] || 0, 1)}</StyledTableCell>
                     {users?.map((u, ui) => (
-                      <>
+                      <React.Fragment key={ui}>
                         <StyledTableCell sx={{ color: colors[ui % colors.length] }} component="th" scope="row">
                           {round(u.evaluations[centerResults?.length - i - 1], 1)}
                         </StyledTableCell>
                         <StyledTableCell sx={{ color: colors[ui % colors.length] }} align="right">
                           {round(u.results[centerResults?.length - i - 1], 1)}
                         </StyledTableCell>
-                      </>
+                      </React.Fragment>
                     ))}
                   </StyledTableRow>
                 ))}

@@ -85,7 +85,7 @@ function UsersData({
           <ValueAxis showTicks />
           {
             users?.map((u, i) => (
-              <LineSeries seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}e`} argumentField="index" color={colors[i % colors.length]} />
+              <LineSeries key={i} seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}e`} argumentField="index" color={colors[i % colors.length]} />
             ))
           }
           <EventTracker />
@@ -107,7 +107,7 @@ function UsersData({
           <ValueAxis showTicks />
           {
             users?.map((u, i) => (
-              <LineSeries seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}r`} argumentField="index" color={colors[i % colors.length]} />
+              <LineSeries key={i} seriesComponent={LineWithCirclePoint} name={`Участник ${u.order}`} valueField={`user${i}r`} argumentField="index" color={colors[i % colors.length]} />
             ))
           }
           <EventTracker />
@@ -124,7 +124,7 @@ function UsersData({
                 <TableRow>
                   <StyledTableCell colSpan={2}>Центр</StyledTableCell>
                   {users?.map((i:any, id: any) => (
-                    <>
+                    <React.Fragment key={id}>
                       <StyledTableCell key={id} align="left" colSpan={2}>
                         <div>
                           Участник №{id + 1}
@@ -150,7 +150,7 @@ function UsersData({
                           )}
                         </div>
                       </StyledTableCell>
-                    </>
+                    </React.Fragment>
                   ))}
                 </TableRow>
                 <TableRow>

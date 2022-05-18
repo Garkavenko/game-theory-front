@@ -32,19 +32,23 @@ export const colors = [
   '#2D728F',
 ];
 
-export const Point = (type: any, styles: any) => (props: any) => {
-  const {
-    arg, val, color,
-  } = props;
-  return (
-    <path
-      fill={color}
-      transform={`translate(${arg} ${val})`}
-      d={symbol().size(() => 50).type(type)() || undefined}
-      style={styles}
-    />
-  );
-};
+export const Point = (type: any, styles: any) => {
+  const Component = (props: any) => {
+    const {
+      arg, val, color,
+    } = props;
+    return (
+      <path
+        fill={color}
+        transform={`translate(${arg} ${val})`}
+        d={symbol().size(() => 50).type(type)() || undefined}
+        style={styles}
+      />
+    );
+  };
+  Component.displayName = 'PointResult';
+  return Component;
+}
 
 export const CirclePoint = Point(symbolCircle, {
   stroke: 'white',
@@ -57,3 +61,5 @@ export const LineWithCirclePoint = (props: any) => (
     <ScatterSeries.Path {...props} pointComponent={CirclePoint} />
   </React.Fragment>
 );
+
+LineWithCirclePoint.displayName = 'LineWithCirclePoint';
