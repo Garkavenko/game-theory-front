@@ -152,7 +152,7 @@ function UsersData({
         </Block>
       </Box>
       <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
-        <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+        <Box sx={{ backgroundColor: '#8e8e8e', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
           <Typography style={{ color: 'white', fontSize: 16 }}>График оценок участников</Typography>
         </Box>
         {/* @ts-ignore */}
@@ -173,7 +173,7 @@ function UsersData({
         </Chart>
       </Box>
       <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
-        <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+        <Box sx={{ backgroundColor: '#8e8e8e', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
           <Typography style={{ color: 'white', fontSize: 16 }}>График значений участников</Typography>
         </Box>
         {/* @ts-ignore */}

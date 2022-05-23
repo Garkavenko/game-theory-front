@@ -91,7 +91,7 @@ function PlayersSettings() {
           <Typography style={{ color: 'white', fontSize: 22 }}>Моделирование процесса распределения портфеля заказов</Typography>
         </Box>
         <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
-          <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+          <Box sx={{ backgroundColor: '#8e8e8e', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
             <Typography style={{ color: 'white', fontSize: 16 }}>Настроить затраты участников</Typography>
           </Box>
           <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -103,7 +103,7 @@ function PlayersSettings() {
         {
           query.data?.data.roomType === 'imitation' && (
             <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
-              <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+              <Box sx={{ backgroundColor: '#8e8e8e', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
                 <Typography style={{ color: 'white', fontSize: 16 }}>Настроить первичные оценки участников участников</Typography>
               </Box>
               <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>

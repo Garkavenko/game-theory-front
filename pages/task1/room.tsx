@@ -41,6 +41,9 @@ import {
 } from 'd3-shape';
 import {colors, LineWithCirclePoint} from "../../components/common/charts/helpers";
 import UsersData from "../../components/Task1/UsersData";
+import CustomTimer from "../../components/common/CustomTimer";
+import Profit from "../../components/common/Profit";
+import ParticipantGameInfo from "../../components/common/ParticipantGameInfo";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -116,20 +119,22 @@ function Room() {
           <Typography style={{ color: 'white', fontSize: 22 }}>Моделирование процесса финансирования совместного проекта</Typography>
         </Box>
 
-        <Block title="Игра" titleColor="green">
+        <Block title="Игра">
           {!query.data?.data?.finished ? (
             <>
-              <Box sx={{ display: 'flex' }}>
-                <Box sx={{ marginRight: 1, borderWidth: 1, borderStyle: 'solid', borderColor: '#91d5ff', backgroundColor: '#e6f7ff', borderRadius: 1, padding: 0.5 }}>
-                  <Typography sx={{ color: '#096dd9' }}>Текущий шаг: <b>{query.data?.data?.currentStep}</b></Typography>
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                <Profit curr={query.data?.data?.results[query.data?.data?.results.length - 1]} prev={query.data?.data?.results[query.data?.data?.results.length - 2]} />
+                <Box sx={{ display: 'flex' }}>
+                  <ParticipantGameInfo currentStep={query.data?.data?.currentStep} />
+                  <Box sx={{ marginRight: 2 }}>
+                    <CustomTimer nextTickAt={query.data?.data?.nextTickAt || 0} />
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Button variant="contained" color="error" onClick={() => {
+                      mutation.mutate();
+                    }}>Завершить игру</Button>
+                  </Box>
                 </Box>
-                <Box sx={{ marginRight: 1, borderWidth: 1, borderStyle: 'solid', borderColor: '#87e8de', backgroundColor: '#e6fffb', borderRadius: 1, padding: 0.5 }}>
-                  <Typography sx={{ color: '#08979c' }}>До следующего шага: <b><Timer finishAt={query.data?.data?.nextTickAt || 0} /></b></Typography>
-                </Box>
-
-                <Button variant="contained" color="error" onClick={() => {
-                  mutation.mutate();
-                }}>Завершить игру</Button>
               </Box>
             </>
           ) : (
@@ -139,7 +144,7 @@ function Room() {
           )}
         </Block>
         <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
-          <Box sx={{ backgroundColor: '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
+          <Box sx={{ backgroundColor: '#8e8e8e', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1 }}>
             <Typography style={{ color: 'white', fontSize: 16 }}>График целевой функции центра</Typography>
           </Box>
           {/* @ts-ignore */}

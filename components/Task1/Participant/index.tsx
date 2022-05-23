@@ -18,6 +18,7 @@ import Timer from "../Timer";
 import Block from "../../common/Block";
 import {LineWithCirclePoint} from "../../common/charts/helpers";
 import UsersData from "../UsersData";
+import ParticipantGameInfo from "../../common/ParticipantGameInfo";
 
 interface ParticipantProps {
   cost?: number;
@@ -61,16 +62,6 @@ function Participant({ cost, evaluations, order, results, children, centerResult
   const theme = useTheme();
   return (
     <Box>
-      <Block title={`Участник #${order}`} titleColor={theme.palette.primary.dark}>
-        <Box sx={{ display: 'flex', marginBottom: 2 }}>
-          <Box sx={{ marginRight: 1, borderWidth: 1, borderStyle: 'solid', borderColor: '#adc6ff', backgroundColor: '#f0f5ff', borderRadius: 1, padding: 0.5 }}>
-            <Typography sx={{ color: '#1d39c4' }}>Текущий шаг: <b>{currentStep}</b></Typography>
-          </Box>
-          <Box sx={{ borderWidth: 1, borderStyle: 'solid', borderColor: '#d3adf7', backgroundColor: '#f9f0ff', borderRadius: 1, padding: 0.5 }}>
-            <Typography sx={{ color: '#531dab' }}>До следующего шага: <b><Timer finishAt={nextTickAt || 0} /></b></Typography>
-          </Box>
-        </Box>
-      </Block>
       {children}
       {!canSeeOthers ? (
         <>
@@ -80,7 +71,7 @@ function Participant({ cost, evaluations, order, results, children, centerResult
                 {/* @ts-ignore */}
                 <Chart
                   data={evaluationsChart}
-                  height={300}
+                  height={350}
                 >
                   <ArgumentAxis />
                   <ValueAxis showTicks />
@@ -93,50 +84,35 @@ function Participant({ cost, evaluations, order, results, children, centerResult
               </Block>
             </Box>
             <Box sx={{ flex: 1 }}>
-              <Block title="Функция цели">
-                {/* @ts-ignore */}
-                <Chart
-                  data={resultsChart}
-                  height={300}
-                >
-                  <ArgumentAxis />
-                  <ValueAxis showTicks />
-
-                  <LineSeries seriesComponent={LineWithCirclePoint} valueField="value" argumentField="step" />
-                  <EventTracker />
-                  {/* @ts-ignore */}
-                  <Tooltip targetItem={resultsTarget} onTargetItemChange={setResultsTarget} />
-                </Chart>
+              <Block title="Значения">
+                <TableContainer sx={{ height: 350, flex: 1 }}>
+                  <Table stickyHeader aria-label="simple table">
+                    <TableHead>
+                      <StyledTableRow>
+                        <StyledTableCell>Шаг</StyledTableCell>
+                        <StyledTableCell align="right">Оценка</StyledTableCell>
+                        <StyledTableCell align="right">Значение цели</StyledTableCell>
+                      </StyledTableRow>
+                    </TableHead>
+                    <TableBody>
+                      {([...(evaluations || [])].reverse())?.map((e, i) => (
+                        <StyledTableRow
+                          key={i}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <StyledTableCell component="th" scope="row">
+                            {(evaluations || []).length - i}
+                          </StyledTableCell>
+                          <StyledTableCell align="right">{e}</StyledTableCell>
+                          <StyledTableCell align="right">{round(results?.[(evaluations || []).length - i - 1] || 0, 1) || '-'}</StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Block>
             </Box>
           </Box>
-          <Block title="Значения">
-            <TableContainer sx={{ maxHeight: 440, width: 500 }}>
-              <Table stickyHeader aria-label="simple table">
-                <TableHead>
-                  <StyledTableRow>
-                    <StyledTableCell>Шаг</StyledTableCell>
-                    <StyledTableCell align="right">Оценка</StyledTableCell>
-                    <StyledTableCell align="right">Значение цели</StyledTableCell>
-                  </StyledTableRow>
-                </TableHead>
-                <TableBody>
-                  {([...(evaluations || [])].reverse())?.map((e, i) => (
-                    <StyledTableRow
-                      key={i}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <StyledTableCell component="th" scope="row">
-                        {(evaluations || []).length - i}
-                      </StyledTableCell>
-                      <StyledTableCell align="right">{e}</StyledTableCell>
-                      <StyledTableCell align="right">{round(results?.[(evaluations || []).length - i - 1] || 0, 1) || '-'}</StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Block>
         </>
       ) : (
         <UsersData users={users || []} centerResults={centerResults || []} />

@@ -11,7 +11,7 @@ function Block({ children, title, titleColor }: BlockProps) {
   return (
     <Box sx={{ backgroundColor: 'white', padding: 2, boxShadow: 4, margin: 2 }}>
       {!!title && (
-        <Box sx={{backgroundColor: titleColor || '#545454', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1}}>
+        <Box sx={{backgroundColor: titleColor || '#8e8e8e', margin: -2, marginBottom: 2, padding: 2, paddingTop: 1, paddingBottom: 1}}>
           <Typography style={{color: 'white', fontSize: 16}}>{title}</Typography>
         </Box>
       )}

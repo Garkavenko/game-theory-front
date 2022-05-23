@@ -47,7 +47,7 @@ function Creation() {
 
   const [roomType, setRoomType] = useState("imitation");
   const [usersNumber, setUsersNumber] = useState("");
-  const [method, setMethod] = useState("1");
+  const [method, setMethod] = useState("4");
   const [penalty, setPenalty] = useState("");
   const [step, setStep] = useState("");
   const [resource, setResource] = useState("");
@@ -97,14 +97,11 @@ function Creation() {
               <FormLabel>Выберите метод приоритетов</FormLabel>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="1"
+                defaultValue="4"
                 value={method}
                 onChange={e => setMethod(e.target.value)}
                 name="radio-buttons-group"
               >
-                <FormControlLabel value="1" control={<Radio />} label="Выпуклая функция приоритета" />
-                <FormControlLabel value="2" control={<Radio />} label="Линейная функция приоритета" />
-                <FormControlLabel value="3" control={<Radio />} label="Вогнутая функция приоритета" />
                 <FormControlLabel value="4" control={<Radio />} label="Функция обратного приоритета" />
               </RadioGroup>
             </FormControl>
