@@ -172,6 +172,7 @@ function RoomPlayer() {
                   <Profit curr={data?.results[data?.results.length - 1]} prev={data?.results[data?.results.length - 2]} />
                   <ParticipantGameInfo currentStep={data?.currentStep} />
                 </Box>
+                {/* @ts-ignore */}
                 <Chart
                   data={resultsChart}
                   height={300}
@@ -181,6 +182,7 @@ function RoomPlayer() {
 
                   <LineSeries seriesComponent={LineWithCirclePoint} valueField="value" argumentField="step" />
                   <EventTracker />
+                  {/* @ts-ignore */}
                   <Tooltip targetItem={resultsTarget} onTargetItemChange={setResultsTarget} />
                 </Chart>
               </Box>

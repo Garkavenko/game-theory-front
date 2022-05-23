@@ -59,7 +59,7 @@ function RoomPlayer() {
   }, [data?.currentStep])
   const theme = useTheme();
 
-  const resultsChart = useMemo(() => data?.results?.map((r, i) => ({ step: i+ 1, value: r })), [data?.results]);
+  const resultsChart = useMemo(() => data?.results?.map((r: any, i: any) => ({ step: i+ 1, value: r })), [data?.results]);
   const [resultsTarget, setResultsTarget] = useState();
   const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -169,6 +169,7 @@ function RoomPlayer() {
                   <Profit curr={data?.results[data?.results.length - 1]} prev={data?.results[data?.results.length - 2]} />
                   <ParticipantGameInfo currentStep={data?.currentStep} />
                 </Box>
+                {/* @ts-ignore */}
                 <Chart
                   data={resultsChart}
                   height={300}
@@ -178,6 +179,7 @@ function RoomPlayer() {
 
                   <LineSeries seriesComponent={LineWithCirclePoint} valueField="value" argumentField="step" />
                   <EventTracker />
+                  {/* @ts-ignore */}
                   <Tooltip targetItem={resultsTarget} onTargetItemChange={setResultsTarget} />
                 </Chart>
               </Box>
