@@ -102,7 +102,7 @@ function Creation() {
                 onChange={e => setMethod(e.target.value)}
                 name="radio-buttons-group"
               >
-                <FormControlLabel value="4" control={<Radio />} label="Функция обратного приоритета" />
+                <FormControlLabel value="4" control={<Radio />} label="Пропорциональное снижение заявок" />
               </RadioGroup>
             </FormControl>
           </FormItem>
